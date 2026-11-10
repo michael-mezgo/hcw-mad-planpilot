@@ -12,7 +12,7 @@ struct PlanPilotView: View {
 
     var body: some View {
         NavigationStack {
-            // Die View kennt nur den Status, nicht das Framework dahinter
+            // The view only knows the status, not the framework behind it
             switch viewModel.modelAvailable {
             case .available:
                 mainView
@@ -42,16 +42,46 @@ struct PlanPilotView: View {
             .buttonStyle(.borderedProminent)
             .disabled(viewModel.input.isEmpty || viewModel.isLoading)
 
-            ScrollView {
-                Text(viewModel.output)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundStyle(.red)
             }
+
+            if viewModel.noPlanFound {
+                ContentUnavailableView("No Plan Found",
+                                       systemImage: "calendar.badge.exclamationmark",
+                                       description: Text("Describe what you want to do, where and when."))
+            }
+
+            // Fields appear one after another while the model is streaming
+            if let entry = viewModel.entry {
+                Form {
+                    Section("Summary") {
+                        Text(entry.summary ?? "…")
+                    }
+
+                    Section("Details") {
+                        field("Title", entry.title)
+                        field("Location", entry.location)
+                        field("Date", viewModel.date?.formatted(date: .complete, time: .omitted))
+                    }
+                }
+            }
+
+            Spacer()
         }
         .padding()
         .navigationTitle("PlanPilot")
     }
 
-    private func fallbackView(_ message: String) -> some View {
+    // While streaming the value is still nil -> show "…" as placeholder
+    private func field(_ label: LocalizedStringKey, _ value: String?) -> some View {
+        LabeledContent(label) {
+            Text(value ?? "…")
+        }
+    }
+
+    private func fallbackView(_ message: LocalizedStringKey) -> some View {
         ContentUnavailableView("Not Available",
                                systemImage: "exclamationmark.triangle",
                                description: Text(message))
