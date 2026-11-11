@@ -63,7 +63,12 @@ struct PlanPilotView: View {
                     Section("Details") {
                         field("Title", entry.title)
                         field("Location", entry.location)
-                        field("Date", viewModel.date?.formatted(date: .complete, time: .omitted))
+                        if viewModel.isLoading {
+                            field("Date", nil)
+                        } else {
+                                let dateText = viewModel.date?.formatted(date: .complete, time: .omitted)
+                            field("Date", dateText ?? "—")
+                        }
                     }
                 }
             }
