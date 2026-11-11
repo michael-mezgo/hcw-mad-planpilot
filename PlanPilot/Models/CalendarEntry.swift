@@ -25,7 +25,8 @@ struct CalendarEntry {
         - relative: 'today', 'tomorrow', 'this <weekday>', 'next <weekday>' (e.g. 'next wednesday')
         - explicit date: '<day> <month name>' (e.g. '15 november'), add the year only if the user said it (e.g. '15 november 2027')
         Normalize numeric dates like '15.11.' or '15/11' to the explicit form.
-        Empty string if the user named no day.
+        Use 'today' ONLY if the user explicitly wrote it (e.g. 'today', 'heute'). Never use it as a default.
+        If the user named no day, no weekday and no date, return an empty string. Do NOT guess and do NOT assume today.
     """)
     var dayDescription: String
 

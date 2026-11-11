@@ -78,6 +78,7 @@ final class PlanPilotViewModel {
         - Ignore other trips, errands, appointments, opinions and small talk.
         - Never combine details from different plans.
         - If a detail is not clearly stated for this plan, leave it empty.
+        - The day is only filled if the user wrote a day, weekday or date. Without one, leave the day empty. Today's date above is only for resolving relative days, never a default.
         - Never invent a destination, date or activity.
         - If the text contains no concrete plan (no destination, activity or day), set hasPlan to false and leave all other fields empty.
         """)
