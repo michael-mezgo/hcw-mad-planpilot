@@ -74,6 +74,11 @@ struct PlanPilotView: View {
             }
 
             Spacer()
+
+            // Shows which on-device model variant is currently used
+            Text("Model: \(viewModel.modelVariant)")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
         .padding()
         .navigationTitle("PlanPilot")

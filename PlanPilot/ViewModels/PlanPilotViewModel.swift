@@ -16,7 +16,7 @@ final class PlanPilotViewModel {
     var entry: CalendarEntry.PartiallyGenerated? // Fields are optional because they are filled in one by one while streaming
     var errorMessage: String?
     var noPlanFound: Bool = false
-
+    
     var isLoading: Bool = false
 
     // The date is calculated by Swift, not by the model. It is nil while streaming.
@@ -25,6 +25,12 @@ final class PlanPilotViewModel {
     }
 
     private let model = SystemLanguageModel(guardrails: .permissiveContentTransformations)
+    
+    var modelVariant: String {
+        let name = model.variant.displayName
+        // displayName can be empty -> fall back to the raw description of the variant
+        return name.isEmpty ? String(describing: model.variant) : name
+    }
 
     var modelAvailable: ModelStatus {
         switch model.availability {
